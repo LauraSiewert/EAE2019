@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BackenOderKochen">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Füge ein Rezept zum Kochen oder Backen hinzu"
+            android:textSize="25sp"
+            android:textAlignment="center"/>
+        <ImageButton
+            android:id="@+id/KOCHEN_B"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/circle"
+            android:src="@drawable/cooking"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:padding="40dp"
+            android:layout_margin="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
+        <ImageButton
+            android:id="@+id/BACKEN_B"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/circle"
+            android:src="@drawable/cupcake"
+            android:paddingTop="20dp"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:padding="40dp"
+            android:layout_margin="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
