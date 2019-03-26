@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner subspinner2;
     ImageButton likeButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -57,13 +58,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         subspinner.setOnItemSelectedListener(this);
 
         rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
-        registerForContextMenu(rezeptListe);
-        updateListe();
+        //registerForContextMenu(rezeptListe);
+        //updateListe();
+
         rezeptListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) {
                 //ID des Eintrags mit übergeben, um dort Details dieses EIntrags zu laden
-                TextView idTextView = view.findViewById(android.R.id.text1);
+                TextView idTextView = view.findViewById(R.id.REZEPT_ID_LIST);
                 String id = idTextView.getText().toString();
 
                 //ID des Eintrags mit übergeben, um dort Details dieses EIntrags zu laden
@@ -139,8 +141,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
                 int itemLayout = R.layout.main_list_item;
                 Cursor cursor = db.selectRezeptByHauptKategorie("Kochen");
-                String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG, db.SPALTE_REZEPT_LIKED};
-                int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG, R.id.LIKE};
+                String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG};
+                int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG};
                 MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, cursor, from, to, 0);
                 rezeptListe.setAdapter(mainListAdapter);
             }
@@ -148,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Liste erstellen, um die Rezepte auszugeben
         rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
         int itemLayout = R.layout.main_list_item;
-        String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG, db.SPALTE_REZEPT_LIKED};
-        int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG, R.id.LIKE};
+        String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG};
+        int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG};
         //Möglichkeiten für den Unterkategorien Spinner
         if (parent == subspinner){
             //wenn mainspinner auf Backen ist

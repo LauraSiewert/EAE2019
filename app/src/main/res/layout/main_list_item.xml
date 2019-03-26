@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <ImageView
         android:id="@+id/REZEPT_BILD"
         android:layout_width="75dp"
-        android:layout_height="75dp" />
+        android:layout_height="75dp"
+        android:clickable="false"
+        android:focusable="false" />
     <LinearLayout
         android:paddingLeft="10dp"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false">
         <TextView
             android:id="@+id/REZEPT_NAME"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false"/>
         <TextView
             android:id="@+id/REZEPT_ID_LIST"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:clickable="false"
+            android:focusable="false"
             />
         <RatingBar
             android:id="@+id/REZEPT_BEWERTUNG"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageButton
-            android:id="@+id/LIKE"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:gravity="center"
-            android:background="@drawable/like"
-            android:padding="40dp"
-            android:layout_margin="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            />
-
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
     </LinearLayout>
 
 </LinearLayout>

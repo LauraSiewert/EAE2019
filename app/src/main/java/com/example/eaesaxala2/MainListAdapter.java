@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.media.Image;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -13,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class MainListAdapter extends CursorAdapter implements View.OnClickListener {
+public class MainListAdapter extends CursorAdapter {
 
     LayoutInflater mainListLayoutInflater;
     int itemLayout;
@@ -21,6 +22,7 @@ public class MainListAdapter extends CursorAdapter implements View.OnClickListen
     int [] to;
     ImageButton imageView2;
     int image2;
+
 
 
     public MainListAdapter (Context ctx, int itemLayout, Cursor c, String [] from, int [] to, int flags){
@@ -31,11 +33,13 @@ public class MainListAdapter extends CursorAdapter implements View.OnClickListen
         this.to = to;
     }
 
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View v = mainListLayoutInflater.inflate(itemLayout, parent, false);
         return v;
     }
+
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
@@ -55,29 +59,24 @@ public class MainListAdapter extends CursorAdapter implements View.OnClickListen
         RatingBar rating = (RatingBar) view.findViewById(to[3]);
         rating.setNumStars(rate);
 
-        image2 = cursor.getInt(cursor.getColumnIndex(from[4]));
+        //Ratingbar auschalten, so dass sie nur angezeigt wird.
+        rating.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+       rating.setFocusable(false);
+
+        /*image2 = cursor.getInt(cursor.getColumnIndex(from[4]));
         imageView2 = (ImageButton) view.findViewById(to[4]);
-        imageView2.setOnClickListener(this);
+        //imageView2.setOnClickListener(this);
         if (image2 == 0){
             imageView2.setBackgroundResource(R.drawable.like);
         }
         if(image2 == 1){
             imageView2.setBackgroundResource(R.drawable.liked);
-        }
+        }*/
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v==imageView2){
-            if(image2==0){
-                image2=1;
-                imageView2.setBackgroundResource(R.drawable.liked);
-            }
-            else if(image2==1){
-                image2=0;
-                imageView2.setBackgroundResource(R.drawable.like);
-            }
-        }
     }
 }
