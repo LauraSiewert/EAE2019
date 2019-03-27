@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DatenBankManager extends SQLiteOpenHelper {
 
 
-    public static final int DATENBANK_VERSION = 6;
+    public static final int DATENBANK_VERSION = 7;
     public static final String KOCHBUCH_DATENBANK = "Kochbuch.db";
     //Rezept-Tabelle
     public static final String TABELLE_REZEPT = "rezept";
@@ -49,7 +49,7 @@ public class DatenBankManager extends SQLiteOpenHelper {
                         SPALTE_REZEPT_BEWERTUNG + " INTEGER, "+
                         SPALTE_REZEPT_SCHWIERIGKEITSGRAD + " INTEGER, " +
                         SPALTE_REZEPT_VORGEHENSWEISE + " TEXT, "+
-                        SPALTE_REZEPT_ZEIT + " REAL, " +
+                        SPALTE_REZEPT_ZEIT + " INTEGER, " +
                         SPALTE_REZEPT_HAUPTKATEGORIE + " TEXT, "+
                         SPALTE_REZEPT_UNTERKATEGORIE + " TEXT, "+
                         SPALTE_REZEPT_LIKED + " INTEGER "+
@@ -125,7 +125,16 @@ public class DatenBankManager extends SQLiteOpenHelper {
             unterkategorie = (String) meinZeiger.getString(meinZeiger.getColumnIndex(SPALTE_REZEPT_UNTERKATEGORIE));
         }
         Rezept rezept = new Rezept(name, foto, zeit, schwierigkeitsgrad, bewertung, vorgehensweise, hauptkategorie, unterkategorie, zutaten);
-        return rezept;
+        if (rezept != null){
+            return rezept;
+        }else{
+            Zutaten zutat = new Zutaten("Test", 32, "Test");
+            ArrayList<Zutaten> zutaten2 = new ArrayList<>();
+            zutaten2.add(zutat);
+            Rezept test = new Rezept("test","test", 42, 1, 1, "Test", "Test", "Test", zutaten2);
+            return test;
+        }
+
     }
 
     public void updateLike (String rezeptnr, int like){

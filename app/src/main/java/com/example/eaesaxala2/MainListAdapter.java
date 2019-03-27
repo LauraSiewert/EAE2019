@@ -67,16 +67,5 @@ public class MainListAdapter extends CursorAdapter {
         });
 
        rating.setFocusable(false);
-
-        /*image2 = cursor.getInt(cursor.getColumnIndex(from[4]));
-        imageView2 = (ImageButton) view.findViewById(to[4]);
-        //imageView2.setOnClickListener(this);
-        if (image2 == 0){
-            imageView2.setBackgroundResource(R.drawable.like);
-        }
-        if(image2 == 1){
-            imageView2.setBackgroundResource(R.drawable.liked);
-        }*/
-
     }
 }

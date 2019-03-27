@@ -1,5 +1,6 @@
 package com.example.eaesaxala2;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,11 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner mainspinner;
     Spinner subspinner;
@@ -78,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Cursor test2 = db.selectRezeptByUnterkategorie("vegetarisch");
         Log.d("SL", DatabaseUtils.dumpCursorToString(test2));
-
-        //likeButton = findViewById(R.id.LIKE);
-        //likeButton.setOnClickListener(this);
 
         //TO-DO:
         //BIld, Bewertung, Herzen in Listview
@@ -208,7 +207,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected (MenuItem item){
         switch (item.getItemId()){
             case R.id.ITEM_SUCHEN:
-                return true;
+                Intent search_viewInt = new Intent(getApplicationContext(), SearchableActivity.class);
+                startActivity(search_viewInt);
             case R.id.ITEM_HINZUFUEGEN:
                 Intent detail_viewInt = new Intent(getApplicationContext(), BackenOderKochen.class);
                 startActivity(detail_viewInt);
@@ -254,19 +254,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         deleteTexView.setTitle(rezeptName + " löschen");
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v==likeButton){
-            TextView idTextView = v.findViewById(android.R.id.text2);
-            String id = idTextView.getText().toString();
-            if (likeButton.getResources().equals(R.drawable.like)){
-                db.updateLike(id, 1);
-            }
-            else {
-                db.updateLike(id, 0);
-            }
-        }
-    }
 }
 
 

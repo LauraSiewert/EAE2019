@@ -33,8 +33,8 @@ public class Rezept {
         this.name = name;
     }
 
-    public int getFoto() {
-        return Integer.parseInt(foto);
+    public String getFoto() {
+        return foto;
     }
 
     public void setFoto(String foto) {
