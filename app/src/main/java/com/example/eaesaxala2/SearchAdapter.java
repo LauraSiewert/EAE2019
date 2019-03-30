@@ -53,6 +53,8 @@ public class SearchAdapter extends BaseAdapter {
         listViewHolder.dictionaryWord.setText(listItemStorage.get(position).getWord());
 
         RatingBar rating = (RatingBar)convertView.findViewById(R.id.REZEPT_BEWERTUNG_SEARCH);
+        int rate = listItemStorage.get(position).getBewertung();
+        rating.setNumStars(rate);
         //Ratingbar auschalten, so dass sie nur angezeigt wird.
         rating.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -61,6 +63,14 @@ public class SearchAdapter extends BaseAdapter {
         });
 
         rating.setFocusable(false);
+
+        ImageView image = (ImageView)convertView.findViewById(R.id.REZEPT_BILD_SEARCH);
+        String imageInhalt = listItemStorage.get(position).getBild();
+        //image.setImageResource(Integer.parseInt(imageInhalt));
+
+        TextView idR = (TextView)convertView.findViewById(R.id.REZEPT_ID_LIST_SEARCH);
+        String idRInhalt = listItemStorage.get(position).getIdR();
+        idR.setText(idRInhalt);
 
         return convertView;
 

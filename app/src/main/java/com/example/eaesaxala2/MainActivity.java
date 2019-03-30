@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         subspinner.setOnItemSelectedListener(this);
 
         rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
-        //registerForContextMenu(rezeptListe);
+        registerForContextMenu(rezeptListe);
         //updateListe();
 
         rezeptListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //TO-DO:
         //Bild: Bild wird gemacht, aber nicht wieder gefunden, Bild muss in Liste angezeigt werden
         //Bild muss auch aus der Bibliothek gefunden werden
-        //Edit-Funktion und Löschen-Funktion aus Menü rausnehmen
-        //Warum wechselt View zuerst zu Kochen oder Backen wenn man auf suchen klickt und nicht direkt auf Suchen?
     }
 
 
@@ -208,14 +206,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected (MenuItem item){
         switch (item.getItemId()){
             case R.id.ITEM_SUCHEN:
-                Intent search_viewInt = new Intent(getApplicationContext(), SearchableActivity.class);
-                startActivity(search_viewInt);
+                if(!((MainActivity) ctx).isFinishing())
+                {
+                    Intent search_viewInt = new Intent(MainActivity.this, SearchableActivity.class);
+                    startActivity(search_viewInt);
+                }
+                break;
             case R.id.ITEM_HINZUFUEGEN:
                 Intent detail_viewInt = new Intent(getApplicationContext(), BackenOderKochen.class);
                 startActivity(detail_viewInt);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
