@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatenBankManager extends SQLiteOpenHelper {
 
@@ -219,5 +220,30 @@ public class DatenBankManager extends SQLiteOpenHelper {
         String where = SPALTE_REZEPT_ID + "=?";
         String[] whereArg = new String[]{Integer.toString(rezeptnr)};
         db.delete(TABELLE_ZUTATEN, where, whereArg);
+    }
+
+    //Methode für die Suche
+
+    public List<ItemObject> searchDictionaryWords(String searchWord){
+
+        List<ItemObject> mItems = new ArrayList<ItemObject>();
+        String query = "Select * FROM "+ TABELLE_REZEPT +" WHERE "+ SPALTE_REZEPT_NAME +" like " + "'%" + searchWord + "%'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> wordTerms = new ArrayList<String>();
+        if(cursor.moveToFirst()){
+            do{
+                int id = cursor.getInt(0);
+                String word = cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_NAME));
+                String bild = cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_NAME));
+                int bewertung = cursor.getInt(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_BEWERTUNG));
+                String idR =  cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_ID));
+
+                mItems.add(new ItemObject(id, word, bild, bewertung, idR));
+            }while(cursor.moveToNext());
+        }
+
+        cursor.close();
+        return mItems;
     }
 }

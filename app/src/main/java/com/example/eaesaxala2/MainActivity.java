@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d("SL", DatabaseUtils.dumpCursorToString(test2));
 
         //TO-DO:
-        //BIld, Bewertung, Herzen in Listview
-        //Suche
-        //MainAcitvity für Detail-Ansicht mit bearbeiten
-
+        //Bild: Bild wird gemacht, aber nicht wieder gefunden, Bild muss in Liste angezeigt werden
+        //Bild muss auch aus der Bibliothek gefunden werden
+        //Edit-Funktion und Löschen-Funktion aus Menü rausnehmen
+        //Warum wechselt View zuerst zu Kochen oder Backen wenn man auf suchen klickt und nicht direkt auf Suchen?
     }
 
 
@@ -202,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    //Methoden für das Menu
+    //Methoden für die Menüs
+
     @Override
     public boolean onOptionsItemSelected (MenuItem item){
         switch (item.getItemId()){
@@ -212,16 +213,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.ITEM_HINZUFUEGEN:
                 Intent detail_viewInt = new Intent(getApplicationContext(), BackenOderKochen.class);
                 startActivity(detail_viewInt);
-            case R.id.ITEM_LOESCHEN:
-                return true;
-            case R.id.ITEM_EDITIEREN:
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();

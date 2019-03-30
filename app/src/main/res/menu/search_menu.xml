@@ -2,14 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/ITEM_SUCHEN"
+        android:id="@+id/ITEM_SUCHEN_DETAIL"
         android:title="Suchen"
         android:icon="@drawable/search"
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/ITEM_HINZUFUEGEN"
-        android:title="Hinzufügen"
-        android:icon="@drawable/add"
         app:showAsAction="always"/>
 </menu>

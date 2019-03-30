@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     android:layout_width="wrap_content">
     <corners android:radius="1000dp" />
-    <solid android:color="#41ba7a" />
+    <solid android:color= "@color/circleColor" />
     <stroke
         android:width="2dip"
-        android:color="#03ae3c" />
+        android:color= "@color/circleStroke" />
     <padding
         android:bottom="4dp"
         android:left="4dp"

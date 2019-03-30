@@ -40,6 +40,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+//TO-DO:
+//Bild soll auch über die Gallery hinzugefügt werden können
+//Aussehen anpassen
+//Zutaten müssen hier schon gelöscht und editiert werden können
+//Warum ist vorgehensweise immer null?
+
+
 public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     Context ctx = this;
     Spinner mainspinner2;
@@ -161,7 +168,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
             int schwierigkeitsgradWert = schwierirgkeitsgrad.getProgress();
             int bewertungWert = (int) bewertung.getRating();
 
-            long id = db.insertRezept(nameRezept, foto.toString(), schwierigkeitsgradWert, bewertungWert, vorgehensweise,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
+            long id = db.insertRezept(nameRezept, foto.toString(), schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
             String newId = Long.toString(id);
 
             //Alle Zutaten hinzufügen
