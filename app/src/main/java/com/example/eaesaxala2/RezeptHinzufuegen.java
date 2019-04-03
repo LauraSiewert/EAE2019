@@ -66,6 +66,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     RatingBar bewertung;
     ImageButton zutatenb;
     ArrayList <Zutaten> neueZutaten = new ArrayList<>();
+    //Test
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
