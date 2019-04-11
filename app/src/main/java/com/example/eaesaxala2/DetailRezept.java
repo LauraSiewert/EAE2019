@@ -1,18 +1,25 @@
 package com.example.eaesaxala2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.database.DatabaseUtils;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class DetailRezept extends AppCompatActivity {
     DatenBankManager db;
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +39,11 @@ public class DetailRezept extends AppCompatActivity {
 
         if (!(id.equals(null))){
             TextView name = findViewById(R.id.NAMEDETAIL);
-            Rezept rezept =  db.selectRezept("1");
+            Rezept rezept =  db.selectRezept(id);
             name.setText(rezept.getName());
-            /*ImageView foto = findViewById(R.id.FOTODETAIl);
-            foto.setImageBitmap(rezept.getFoto());*/
+            ImageView foto = findViewById(R.id.FOTODETAIl);
+            Bitmap bitmap = BitmapFactory.decodeFile(rezept.foto);
+            foto.setImageBitmap(bitmap);
             TextView zeit = findViewById(R.id.ZEITDETAIL);
             zeit.setText(Integer.toString(rezept.getZeit()));
             TextView bewertung = findViewById(R.id.BEWERTUNGDETAIL);
@@ -46,6 +54,11 @@ public class DetailRezept extends AppCompatActivity {
             hauptkategorie.setText(rezept.hauptkategorie);
             TextView unterkategorie = findViewById(R.id.UNTERKATEGORIEDETAIL);
             unterkategorie.setText(rezept.unterkategorie);
+            ListView zutatenListe = (ListView) findViewById(R.id.ZUTATEN_LISTE_DETAIL);
+            ArrayList <Zutaten> zutaten = rezept.getZutaten();
+            Log.d("SL", "das sind die zutaten" + zutaten.toString());
+            ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, zutaten);
+            zutatenListe.setAdapter(mAdapter);
         }
     }
 }

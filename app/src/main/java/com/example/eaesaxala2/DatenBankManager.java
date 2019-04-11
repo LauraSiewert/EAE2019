@@ -3,8 +3,10 @@ package com.example.eaesaxala2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
 public class DatenBankManager extends SQLiteOpenHelper {
 
 
-    public static final int DATENBANK_VERSION = 7;
+    public static final int DATENBANK_VERSION = 8;
     public static final String KOCHBUCH_DATENBANK = "Kochbuch.db";
     //Rezept-Tabelle
     public static final String TABELLE_REZEPT = "rezept";
@@ -61,8 +63,8 @@ public class DatenBankManager extends SQLiteOpenHelper {
                         SPALTE_ZUTATEN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         SPALTE_ZUTATEN_NAME + " TEXT, " +
                         SPALTE_REZEPT_ID +" INTEGER NOT NULL, " +
-                        SPALTE_MENGE + "REAL, "+
-                        SPALTE_EINHEIT + "TEXT, "+
+                        SPALTE_MENGE + " REAL, "+
+                        SPALTE_EINHEIT + " TEXT, "+
                         "FOREIGN KEY("+ SPALTE_REZEPT_ID + ") REFERENCES "+ TABELLE_ZUTATEN+"("+SPALTE_REZEPT_ID +")"+
                         ")"
         );
@@ -195,9 +197,11 @@ public class DatenBankManager extends SQLiteOpenHelper {
         neueZeile.put(SPALTE_EINHEIT, einheit);
         neueZeile.put(SPALTE_MENGE, menge);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABELLE_ZUTATEN, null, neueZeile);
 
-        long newRowId = db.insert(DatenBankManager.TABELLE_REZEPT, null, neueZeile);
+        //db.insert(TABELLE_ZUTATEN, null, neueZeile);
+        Log.d("SL", "Die Zutaten wurden hinzugefügt "+ neueZeile);
+
+        long newRowId = db.insertOrThrow(DatenBankManager.TABELLE_ZUTATEN, null, neueZeile);
 
         //Gibt neue ID zurück
         return newRowId;
@@ -207,19 +211,40 @@ public class DatenBankManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor meinZeiger = db.rawQuery("SELECT * FROM "+ TABELLE_ZUTATEN + " WHERE "+ SPALTE_REZEPT_ID + " = "+ Integer.parseInt(rezeptnr), null);
         ArrayList<Zutaten> zutaten= new ArrayList<>();
-        if(meinZeiger.moveToFirst()){
-            zutaten.get(0).setName(meinZeiger.getString(meinZeiger.getColumnIndex(SPALTE_ZUTATEN_NAME)));
-            zutaten.get(0).setEinheit(meinZeiger.getString(meinZeiger.getColumnIndex(SPALTE_EINHEIT)));
-            zutaten.get(0).setMenge(meinZeiger.getDouble(meinZeiger.getColumnIndex(SPALTE_MENGE)));
+        Log.d("Sl", " "+meinZeiger.getCount());
+        meinZeiger.moveToFirst();
+        while(!meinZeiger.isAfterLast()) {
+                Zutaten zutat = new Zutaten();
+                zutat.setName(meinZeiger.getString(meinZeiger.getColumnIndex(SPALTE_ZUTATEN_NAME)));
+                zutat.setEinheit(meinZeiger.getString(meinZeiger.getColumnIndex(SPALTE_EINHEIT)));
+                zutat.setMenge(meinZeiger.getDouble(meinZeiger.getColumnIndex(SPALTE_MENGE)));
+                zutaten.add(zutat);
+                meinZeiger.moveToNext();
         }
+        Log.d("SL", "das sind meine Zutaten:"+zutaten.toString());
         return zutaten;
     }
+
+    public Cursor selectZutatenFürRezeptWithCursos (String rezeptnr){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor meinZeiger = db.rawQuery("SELECT * FROM "+ TABELLE_ZUTATEN + " WHERE "+ SPALTE_REZEPT_ID + " = "+ Integer.parseInt(rezeptnr), null);
+        meinZeiger.moveToFirst();
+        return meinZeiger;
+    }
+
 
     public void deleteZutatenFürRezept (int rezeptnr){
         SQLiteDatabase db = this.getWritableDatabase();
         String where = SPALTE_REZEPT_ID + "=?";
         String[] whereArg = new String[]{Integer.toString(rezeptnr)};
         db.delete(TABELLE_ZUTATEN, where, whereArg);
+    }
+
+    public Cursor selectAllZutaten (){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor meinZeiger = db.rawQuery("SELECT * FROM "+ TABELLE_ZUTATEN,null);
+        meinZeiger.moveToFirst();
+        return meinZeiger;
     }
 
     //Methode für die Suche

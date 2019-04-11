@@ -1,5 +1,6 @@
 package com.example.eaesaxala2;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,17 +9,22 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,10 +47,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 //TO-DO:
-//Bild soll auch über die Gallery hinzugefügt werden können
 //Aussehen anpassen
-//Zutaten müssen hier schon gelöscht und editiert werden können
 //Warum ist vorgehensweise immer null?
+//Prüfung, wenn etwas nicht eingegeben wird, dass die App nicht abstürzt
 
 
 public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
@@ -66,8 +71,10 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     RatingBar bewertung;
     ImageButton zutatenb;
     ArrayList <Zutaten> neueZutaten = new ArrayList<>();
+    ListView  zutatenListe;
     //Test
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +122,13 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
 
         //Ausgewählten SpinnerInhalt
         setDefaultSpinner(choosed);
+
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        //ZutatenListeActions
+        zutatenListe = (ListView) findViewById(R.id.ZUTATEN_LISTE);
+        registerForContextMenu(zutatenListe);
+
     }
 
     public void rateMe(View view){
@@ -123,26 +137,25 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     }
 
     //Kamera
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == CAM_REQUEST){
-            bitmap = (Bitmap) data.getExtras().get("data");
-            Log.d("SL", "extras ist: "+ bitmap);
-            foto.setImageBitmap(bitmap);
-        }
+    private void setPic() {
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+        foto.setImageBitmap(bitmap);
     }
 
-    //@Override
-    /*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            /*Bundle extras = data.getExtras();
-            Log.d("SL", "extras ist: "+extras);
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            bitmap = (Bitmap) data.getExtras().get("data");
-            foto.setImageBitmap(bitmap);
+            setPic();
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                foto.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }*/
+    }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String currentPhotoPath;
@@ -163,8 +176,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         return image;
     }
 
-    static final int REQUEST_TAKE_PHOTO = 1;
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -173,19 +184,20 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
             File photoFile = null;
             try {
                 photoFile = createImageFile();
+                Log.d("Sl", "Image file wurde kreiert");
             } catch (IOException ex) {
                 // Error occurred while creating the File
+                Log.d("Sl", "ERROOOOOOR yeaaah");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                Log.d("Sl", "photofile ist nicht null");
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
-                Log.d("SL", "Das File wurde kreiert");
+                Log.d("SL", "PhotoURI"+ photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(intent,CAM_REQUEST);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
     }
@@ -236,12 +248,12 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
             int schwierigkeitsgradWert = schwierirgkeitsgrad.getProgress();
             int bewertungWert = (int) bewertung.getRating();
 
-            long id = db.insertRezept(nameRezept, foto.toString(), schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
+            long id = db.insertRezept(nameRezept, currentPhotoPath, schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
             String newId = Long.toString(id);
 
             //Alle Zutaten hinzufügen
             for (int i=0; i<neueZutaten.size(); i++){
-                long id2 = db.insertZutaten(neueZutaten.get(i).name, neueZutaten.get(i).menge, neueZutaten.get(i).einheit, newId);
+                db.insertZutaten(neueZutaten.get(i).name, neueZutaten.get(i).menge, neueZutaten.get(i).einheit, newId);
             }
             //Alle gespeicherten Zutaten löschen, da nicht mehr gebraucht.
             neueZutaten.clear();
@@ -285,23 +297,9 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
 
 
                     //Zutaten hinzufügen
-                    ListView zutatenListe = findViewById(R.id.ZUTATEN_LISTE);
-                    int itemRes = android.R.layout.simple_list_item_2;
-
-                    //In Liste anzeigen
-                    ArrayList <String> namen = new ArrayList<>();
-                    ArrayList <String> menge2 = new ArrayList<>();
-                    int textView1 = android.R.id.text1;
-                    int textView2 = android.R.id.text2;
-                    for(int j=0; j<neueZutaten.size(); j++){
-                        namen.add(neueZutaten.get(j).getName());
-                        Log.d("SL","ist:"+ neueZutaten.get(j).getName());
-                        menge2.add(neueZutaten.get(j).getMenge()+" "+ neueZutaten.get(j).getEinheit());
-                    }
-                    ArrayAdapter zutatenAdapter = new ArrayAdapter(ctx, itemRes, textView1, namen);
-                    ArrayAdapter zutatenAdapter2 = new ArrayAdapter(ctx, itemRes, textView2, menge2);
-                    zutatenListe.setAdapter(zutatenAdapter);
-                    zutatenListe.setAdapter(zutatenAdapter2);
+                    zutatenListe = findViewById(R.id.ZUTATEN_LISTE);
+                    ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, neueZutaten);
+                    zutatenListe.setAdapter(mAdapter);
 
                 }
             });
@@ -385,6 +383,36 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.ITEM_DELETE:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+                neueZutaten.remove((int) info.position);
+                updateListe();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        String rezeptName = neueZutaten.get(info.position).name;
+
+        MenuItem deleteTexView = menu.findItem(R.id.ITEM_DELETE);
+        deleteTexView.setTitle(rezeptName + " löschen");
+    }
+
+    public void updateListe() {
+        zutatenListe = findViewById(R.id.ZUTATEN_LISTE);
+        ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, neueZutaten);
+        zutatenListe.setAdapter(mAdapter);
+    }
 }
 
 

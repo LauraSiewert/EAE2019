@@ -80,10 +80,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Cursor test2 = db.selectRezeptByUnterkategorie("vegetarisch");
         Log.d("SL", DatabaseUtils.dumpCursorToString(test2));
+        Cursor test3 = db.selectAllZutaten();
+        Log.d("SL", DatabaseUtils.dumpCursorToString(test3));
 
         //TO-DO:
-        //Bild: Bild wird gemacht, aber nicht wieder gefunden, Bild muss in Liste angezeigt werden
-        //Bild muss auch aus der Bibliothek gefunden werden
+        //Update richtig Programmieren, so dass nachdem löschen die richtigen Rezepte angezeigt werden, unter den richtigen Filtern
     }
 
 

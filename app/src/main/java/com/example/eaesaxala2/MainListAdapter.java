@@ -3,6 +3,8 @@ package com.example.eaesaxala2;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,9 +22,6 @@ public class MainListAdapter extends CursorAdapter {
     int itemLayout;
     String [] from;
     int [] to;
-    ImageButton imageView2;
-    int image2;
-
 
 
     public MainListAdapter (Context ctx, int itemLayout, Cursor c, String [] from, int [] to, int flags){
@@ -43,9 +42,10 @@ public class MainListAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        int image = cursor.getInt(cursor.getColumnIndex(from[0]));
+        String image = cursor.getString(cursor.getColumnIndex(from[0]));
         ImageView imageView = (ImageView) view.findViewById(to[0]);
-        imageView.setImageResource(image);
+        Bitmap bitmap = BitmapFactory.decodeFile(image);
+        imageView.setImageBitmap(bitmap);
 
         String text1 = cursor.getString(cursor.getColumnIndex(from[1]));
         TextView textView = (TextView)view.findViewById(to[1]);
