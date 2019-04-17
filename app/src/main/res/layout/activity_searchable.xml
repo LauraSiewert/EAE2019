@@ -18,11 +18,14 @@
             android:id="@+id/SEARCHTEXT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp"
             />
     <ListView
         android:id="@+id/SEARCHLIST"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"></ListView>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

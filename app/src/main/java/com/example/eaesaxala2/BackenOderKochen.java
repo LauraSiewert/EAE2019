@@ -25,6 +25,8 @@ public class BackenOderKochen extends AppCompatActivity implements View.OnClickL
         kochen.setOnClickListener(this);
         backen.setOnClickListener(this);
 
+        setTitle("Rezept hinzufügen");
+
     }
 
     @Override

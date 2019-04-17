@@ -2,7 +2,14 @@ package com.example.eaesaxala2;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.Rating;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +46,7 @@ public class SearchAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) { return position; }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder listViewHolder;
@@ -62,11 +70,16 @@ public class SearchAdapter extends BaseAdapter {
             }
         });
 
+        Drawable stars = rating.getProgressDrawable();
+        stars.setTint( Color.parseColor("#ADCD58"));
+
         rating.setFocusable(false);
 
-        ImageView image = (ImageView)convertView.findViewById(R.id.REZEPT_BILD_SEARCH);
-        String imageInhalt = listItemStorage.get(position).getBild();
-        //image.setImageResource(Integer.parseInt(imageInhalt));
+        Log.d("SL", "das ist mein Bild: " + listItemStorage.get(position).getBild());
+        String image = listItemStorage.get(position).getBild();
+        ImageView imageView = (ImageView)convertView.findViewById(R.id.REZEPT_BILD_SEARCH);
+        Bitmap bitmap = BitmapFactory.decodeFile(image);
+        imageView.setImageBitmap(bitmap);
 
         TextView idR = (TextView)convertView.findViewById(R.id.REZEPT_ID_LIST_SEARCH);
         String idRInhalt = listItemStorage.get(position).getIdR();

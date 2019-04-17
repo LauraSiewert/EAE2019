@@ -90,6 +90,7 @@ public class DatenBankManager extends SQLiteOpenHelper {
         neueZeile.put(SPALTE_REZEPT_HAUPTKATEGORIE, hauptkategorie);
         neueZeile.put(SPALTE_REZEPT_UNTERKATEGORIE, unterkategorie);
         neueZeile.put(SPALTE_REZEPT_LIKED, 0);
+        neueZeile.put(SPALTE_REZEPT_VORGEHENSWEISE, vorgehensweise);
         SQLiteDatabase db = this.getWritableDatabase();
 
         long newRowId = db.insert(DatenBankManager.TABELLE_REZEPT, null, neueZeile);
@@ -260,7 +261,7 @@ public class DatenBankManager extends SQLiteOpenHelper {
             do{
                 int id = cursor.getInt(0);
                 String word = cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_NAME));
-                String bild = cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_NAME));
+                String bild = cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_BILD));
                 int bewertung = cursor.getInt(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_BEWERTUNG));
                 String idR =  cursor.getString(cursor.getColumnIndexOrThrow(SPALTE_REZEPT_ID));
 

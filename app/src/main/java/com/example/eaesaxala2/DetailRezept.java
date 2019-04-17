@@ -54,6 +54,9 @@ public class DetailRezept extends AppCompatActivity {
             hauptkategorie.setText(rezept.hauptkategorie);
             TextView unterkategorie = findViewById(R.id.UNTERKATEGORIEDETAIL);
             unterkategorie.setText(rezept.unterkategorie);
+            Log.d("SL", "Das ist die Vorgehensweise: "+ rezept.vorgehensweise);
+            TextView vorgehensweise = findViewById(R.id.VORGEHENSWEISE_EDITTEXT);
+            vorgehensweise.setText(rezept.vorgehensweise);
             ListView zutatenListe = (ListView) findViewById(R.id.ZUTATEN_LISTE_DETAIL);
             ArrayList <Zutaten> zutaten = rezept.getZutaten();
             Log.d("SL", "das sind die zutaten" + zutaten.toString());

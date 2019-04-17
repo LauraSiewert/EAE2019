@@ -26,6 +26,9 @@ public class BackenGewaehlt extends AppCompatActivity implements View.OnClickLis
         notVegan = findViewById(R.id.VEGGI_B2);
         vegan.setOnClickListener(this);
         notVegan.setOnClickListener(this);
+
+        setTitle("Rezept hinzufügen");
+
     }
 
     @Override

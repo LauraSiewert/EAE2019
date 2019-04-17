@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner mainspinner2;
     Spinner subspinner2;
     ImageButton likeButton;
-
+    TextView alertNoEntries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -59,9 +59,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         subspinner = (Spinner) findViewById(R.id.SUB_SPINNER);
         subspinner.setOnItemSelectedListener(this);
 
+        //TextView noEntries
+        alertNoEntries = (TextView) findViewById(R.id.NO_ENTRIES);
+
+        //Rezeptliste
         rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
         registerForContextMenu(rezeptListe);
-        //updateListe();
+        updateListe();
+
+
 
         rezeptListe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,13 +96,91 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     public void updateListe() {
-        Cursor zeiger = db.selectAllRezepte();
-        String[] spalten = new String[] {db.SPALTE_REZEPT_NAME};
-        int list = android.R.layout.simple_list_item_1;
-        int[] items = new int[] {android.R.id.text1};
+        int itemLayout = R.layout.main_list_item;
+        String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG};
+        int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG};
+        MainListAdapter mainListAdapter;
+        if (mainspinner.getSelectedItem().toString().equals(null)){
+            mainspinner.setSelection(0);
+        }
+        if(subspinner.getSelectedItem()==null){
+            String [] inhalt = {"vegan"};
+            setSpinner(subspinner,inhalt);
+        }
+        switch (mainspinner.getSelectedItem().toString()) {
+            case "Backen":
+                switch (subspinner.getSelectedItem().toString()) {
+                    case "vegan":
+                        //Liste neu setzen
+                        Cursor sub00 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegan", "Backen");
+                        mainListAdapter = new MainListAdapter(ctx, itemLayout, sub00, from, to, 0);
+                        rezeptListe.setAdapter(mainListAdapter);
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, list, zeiger, spalten, items, 0);
-        rezeptListe.setAdapter(adapter);
+                        //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                        if (sub00.getCount() == 0) {
+                            alertNoEntries.setVisibility(View.VISIBLE);
+                        } else {
+                            alertNoEntries.setVisibility(View.GONE);
+                        }
+                        break;
+                    case "nicht vegan":
+                        //Liste neu setzen
+                        Cursor sub01 = db.selectRezeptByUnterkategorieUndHauptkategorie("nicht vegan", "Backen");
+                        mainListAdapter = new MainListAdapter(ctx, itemLayout, sub01, from, to, 0);
+                        rezeptListe.setAdapter(mainListAdapter);
+                        //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                        if (sub01.getCount() == 0) {
+                            alertNoEntries.setVisibility(View.VISIBLE);
+                        } else {
+                            alertNoEntries.setVisibility(View.GONE);
+                        }
+                        break;
+                }
+                break;
+            case "Kochen":
+                switch (subspinner.getSelectedItem().toString()) {
+                    case "vegan":
+                        //Liste neu setzen
+                        Cursor sub10 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegan", "Kochen");
+                        mainListAdapter = new MainListAdapter(ctx, itemLayout, sub10, from, to, 0);
+                        rezeptListe.setAdapter(mainListAdapter);
+
+                        //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                        if (sub10.getCount() == 0) {
+                            alertNoEntries.setVisibility(View.VISIBLE);
+                        } else {
+                            alertNoEntries.setVisibility(View.GONE);
+                        }
+                        break;
+                    case "nicht vegan":
+                        Cursor sub12 = db.selectRezeptByUnterkategorieUndHauptkategorie("nicht vegan", "Kochen");
+                        mainListAdapter = new MainListAdapter(ctx, itemLayout, sub12, from, to, 0);
+                        rezeptListe.setAdapter(mainListAdapter);
+
+                        //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                        if (sub12.getCount() == 0) {
+                            alertNoEntries.setVisibility(View.VISIBLE);
+                        } else {
+                            alertNoEntries.setVisibility(View.GONE);
+                        }
+                        break;
+                    case "vegetarisch":
+                        //Liste neu setzen
+                        Cursor sub11 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegetarisch", "Kochen");
+                        mainListAdapter = new MainListAdapter(ctx, itemLayout, sub11, from, to, 0);
+                        rezeptListe.setAdapter(mainListAdapter);
+
+                        //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                        if (sub11.getCount() == 0) {
+                            alertNoEntries.setVisibility(View.VISIBLE);
+                        } else {
+                            alertNoEntries.setVisibility(View.GONE);
+                        }
+                        break;
+                }
+            default:
+                Log.d("SL", "Das hat nicht funktioniert!");
+        }
     }
 
     //Methode um schneller, Liste zu setzen
@@ -136,13 +220,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 inhalt[1] = unterkategorie[2];
                 inhalt[2] = unterkategorie[1];
                 setSpinner(subspinner, inhalt);
-                rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
+                /*rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
                 int itemLayout = R.layout.main_list_item;
                 Cursor cursor = db.selectRezeptByHauptKategorie("Kochen");
                 String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG};
                 int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG};
                 MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, cursor, from, to, 0);
-                rezeptListe.setAdapter(mainListAdapter);
+                rezeptListe.setAdapter(mainListAdapter);*/
             }
         }
         //Liste erstellen, um die Rezepte auszugeben
@@ -158,16 +242,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Cursor sub00 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegan", "Backen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, sub00, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(sub00.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
                 else if (position==1){
                     Cursor sub01 = db.selectRezeptByUnterkategorieUndHauptkategorie("nicht vegan", "Backen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, sub01, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(sub01.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
                 else{
                     Cursor cursor = db.selectRezeptByHauptKategorie("Backen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, cursor, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(cursor.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
             }
             //wenn mainspinner auf Kochen ist
@@ -176,21 +281,49 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Cursor sub10 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegan", "Kochen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, sub10, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(sub10.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
                 else if (position==1){
                     Cursor sub11 = db.selectRezeptByUnterkategorieUndHauptkategorie("vegetarisch", "Kochen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, sub11, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(sub11.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
                 else if (position==2){
                     Cursor sub12 = db.selectRezeptByUnterkategorieUndHauptkategorie("nicht vegan", "Kochen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, sub12, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(sub12.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
                 else{
                     Cursor cursor = db.selectRezeptByHauptKategorie("Kochen");
                     MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, cursor, from, to, 0);
                     rezeptListe.setAdapter(mainListAdapter);
+
+                    //Meldung anzeigen, wenn keine Einträge vorhanden sind
+                    if(cursor.getCount()==0){
+                        alertNoEntries.setVisibility(View.VISIBLE);
+                    }else{
+                        alertNoEntries.setVisibility(View.GONE);
+                    }
                 }
             }
         }
@@ -216,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.ITEM_HINZUFUEGEN:
                 Intent detail_viewInt = new Intent(getApplicationContext(), BackenOderKochen.class);
                 startActivity(detail_viewInt);
+                updateListe();
                 break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -5,7 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.Image;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +46,7 @@ public class MainListAdapter extends CursorAdapter {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         String image = cursor.getString(cursor.getColumnIndex(from[0]));
@@ -58,6 +65,8 @@ public class MainListAdapter extends CursorAdapter {
         int rate = cursor.getInt(cursor.getColumnIndex(from[3]));
         RatingBar rating = (RatingBar) view.findViewById(to[3]);
         rating.setNumStars(rate);
+        Drawable stars = rating.getProgressDrawable();
+        stars.setTint( Color.parseColor("#ADCD58"));
 
         //Ratingbar auschalten, so dass sie nur angezeigt wird.
         rating.setOnTouchListener(new View.OnTouchListener() {

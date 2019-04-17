@@ -23,6 +23,9 @@ public class KochenGewaehlt extends AppCompatActivity implements View.OnClickLis
         vegan.setOnClickListener(this);
         veggie.setOnClickListener(this);
         meat.setOnClickListener(this);
+
+        setTitle("Rezept hinzufügen");
+
     }
 
     @Override

@@ -3,4 +3,5 @@
     <string name="search_hint">Suche Rezept..</string>
     <string name="app_label">EAESaXaLa2</string>
     <string name="search_view">Was suchst du?</string>
+    <string name="main_noEntries_label">Du hast noch kein Rezept hinzugefügt.</string>
 </resources>

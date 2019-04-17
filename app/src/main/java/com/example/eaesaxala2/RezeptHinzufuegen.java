@@ -26,12 +26,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
@@ -45,6 +47,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 //TO-DO:
 //Aussehen anpassen
@@ -129,6 +132,25 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         zutatenListe = (ListView) findViewById(R.id.ZUTATEN_LISTE);
         registerForContextMenu(zutatenListe);
 
+    }
+
+    //Höhe für die ListView berechnen, da sich diese in einer Scrollview befindet
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1))+20;
+        listView.setLayoutParams(params);
     }
 
     public void rateMe(View view){
@@ -300,6 +322,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                     zutatenListe = findViewById(R.id.ZUTATEN_LISTE);
                     ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, neueZutaten);
                     zutatenListe.setAdapter(mAdapter);
+                    setListViewHeightBasedOnChildren(zutatenListe);
 
                 }
             });
@@ -389,6 +412,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
                 neueZutaten.remove((int) info.position);
                 updateListe();
+                setListViewHeightBasedOnChildren(zutatenListe);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -413,6 +437,10 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, neueZutaten);
         zutatenListe.setAdapter(mAdapter);
     }
+
+    /*public void checkInformation(){
+        if()
+    }*/
 }
 
 

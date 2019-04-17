@@ -13,8 +13,8 @@
         android:layout_gravity="center_vertical">
         <ImageButton
             android:id="@+id/VEGGI_B2"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:background="@drawable/circle"
             android:src="@drawable/broccoli"
             android:paddingTop="20dp"
@@ -26,8 +26,8 @@
             android:scaleType="fitCenter"/>
         <ImageButton
             android:id="@+id/VEGAN_B2"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:background="@drawable/circle"
             android:src="@drawable/leaves"
             android:paddingTop="20dp"
