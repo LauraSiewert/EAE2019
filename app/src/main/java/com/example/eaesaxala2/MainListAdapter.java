@@ -64,10 +64,11 @@ public class MainListAdapter extends CursorAdapter {
 
         int rate = cursor.getInt(cursor.getColumnIndex(from[3]));
         RatingBar rating = (RatingBar) view.findViewById(to[3]);
-        rating.setNumStars(rate);
-        Drawable stars = rating.getProgressDrawable();
-        stars.setTint( Color.parseColor("#ADCD58"));
-
+        if(!(rate==0)){
+            rating.setNumStars(rate);
+            Drawable stars = rating.getProgressDrawable();
+            stars.setTint( Color.parseColor("#ADCD58"));
+        }
         //Ratingbar auschalten, so dass sie nur angezeigt wird.
         rating.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {

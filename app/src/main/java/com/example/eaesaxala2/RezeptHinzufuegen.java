@@ -75,6 +75,9 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     ImageButton zutatenb;
     ArrayList <Zutaten> neueZutaten = new ArrayList<>();
     ListView  zutatenListe;
+    EditText nameRezeptEditText;
+    EditText zeitEditText;
+    EditText vorgehenEditText;
     //Test
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -132,6 +135,10 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         zutatenListe = (ListView) findViewById(R.id.ZUTATEN_LISTE);
         registerForContextMenu(zutatenListe);
 
+        //Eingabefelder holen
+        nameRezeptEditText = (EditText) findViewById(R.id.NAME_EDITTEXT);
+        zeitEditText = (EditText) findViewById(R.id.ZEIT_EDITTEXT);
+        vorgehenEditText = (EditText)findViewById(R.id.VORGEHENSWEISE_EDITTEXT);
     }
 
     //Höhe für die ListView berechnen, da sich diese in einer Scrollview befindet
@@ -261,33 +268,32 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v==ok){
-            EditText nameRezeptEditText = (EditText) findViewById(R.id.NAME_EDITTEXT);
-            EditText zeitEditText = (EditText) findViewById(R.id.ZEIT_EDITTEXT);
-            EditText vorgehenEditText = (EditText)findViewById(R.id.VORGEHENSWEISE_EDITTEXT);
-            String nameRezept = nameRezeptEditText.getText().toString();
-            int zeit = Integer.parseInt(zeitEditText.getText().toString());
-            String vorgehensweise = vorgehenEditText.getText().toString();
-            int schwierigkeitsgradWert = schwierirgkeitsgrad.getProgress();
-            int bewertungWert = (int) bewertung.getRating();
+            if (checkInformation(currentPhotoPath,nameRezeptEditText, zeitEditText, zutatenListe,vorgehenEditText)){
+                String nameRezept = nameRezeptEditText.getText().toString();
+                int zeit = Integer.parseInt(zeitEditText.getText().toString());
+                String vorgehensweise = vorgehenEditText.getText().toString();
+                int schwierigkeitsgradWert = schwierirgkeitsgrad.getProgress();
+                int bewertungWert = (int) bewertung.getRating();
 
-            long id = db.insertRezept(nameRezept, currentPhotoPath, schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
-            String newId = Long.toString(id);
 
-            //Alle Zutaten hinzufügen
-            for (int i=0; i<neueZutaten.size(); i++){
-                db.insertZutaten(neueZutaten.get(i).name, neueZutaten.get(i).menge, neueZutaten.get(i).einheit, newId);
+                long id = db.insertRezept(nameRezept, currentPhotoPath, schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
+                String newId = Long.toString(id);
+
+                //Alle Zutaten hinzufügen
+                for (int i=0; i<neueZutaten.size(); i++){
+                    db.insertZutaten(neueZutaten.get(i).name, neueZutaten.get(i).menge, neueZutaten.get(i).einheit, newId);
+                }
+                //Alle gespeicherten Zutaten löschen, da nicht mehr gebraucht.
+                neueZutaten.clear();
+
+                //Activity wechseln
+                Intent detail_viewInt = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(detail_viewInt);
+
+                //TO-DO: hier Toast, dass es tatsächlich gespeichert wurdes
+                Toast saveToast = Toast.makeText(this, "Dein Rezept wurde gespeichert.", Toast.LENGTH_SHORT);
+                saveToast.show();
             }
-            //Alle gespeicherten Zutaten löschen, da nicht mehr gebraucht.
-            neueZutaten.clear();
-
-            //Activity wechseln
-            Intent detail_viewInt = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(detail_viewInt);
-
-            //TO-DO: hier Toast, dass es tatsächlich gespeichert wurdes
-            Toast saveToast = Toast.makeText(this, "Dein Rezept wurde gespeichert.", Toast.LENGTH_SHORT);
-            saveToast.show();
-
         }
         else if(v==cancel){
             Intent detail_viewInt = new Intent(getApplicationContext(), MainActivity.class);
@@ -438,9 +444,25 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         zutatenListe.setAdapter(mAdapter);
     }
 
-    /*public void checkInformation(){
-        if()
-    }*/
+
+//Funktion um zu prüfen, ob alle Angaben, bis auf rating und bewertung (können ja auch 0 sein), gemacht wurden
+    public boolean checkInformation(String image, EditText titel, EditText zeit, ListView zutaten, EditText zubereitung){
+        Button ok = (Button)findViewById(R.id.OK);
+        ok.isEnabled();
+        if((image==null)||(titel.getText().toString().matches(""))||(zeit.getText().toString().matches(""))||(zutaten.equals(null))||(zubereitung.getText().toString().matches(""))){
+            AlertDialog dialog;
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Es fehlen Informationen");
+            builder.setMessage("Bitte trage die fehlenden Informationen ein.");
+            dialog = builder.create();
+            dialog.show();
+            return false;
+        }
+        else{
+            ok.isClickable();
+            return true;
+        }
+    }
 }
 
 
