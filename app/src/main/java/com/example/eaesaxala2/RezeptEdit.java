@@ -17,6 +17,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -133,7 +136,7 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             zutatenListe.setAdapter(mAdapter);
             setListViewHeightBasedOnChildren(zutatenListe);
 
-
+            registerForContextMenu(zutatenListe);
 
         }
 
@@ -143,6 +146,35 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
         addZutat.setOnClickListener(this);
 
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.ITEM_DELETE:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+                Log.d("XL",""+info.position);
+                Toast.makeText(ctx, zutaten.get(info.position).name + " gelöscht.", Toast.LENGTH_SHORT).show();
+                zutaten.remove(info.position);
+                zutatenListe.invalidateViews();
+                setListViewHeightBasedOnChildren(zutatenListe);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        Log.d("XL",""+info.position);
+        Log.d("XL", "" + zutaten.get(info.position).name);
+
+        MenuItem deleteTexView = menu.findItem(R.id.ITEM_DELETE);
+        deleteTexView.setTitle(zutaten.get(info.position).name + " löschen");
     }
 
     //Kamera
@@ -266,7 +298,7 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
                 detail_viewInt.putExtra("id", id);
                 startActivity(detail_viewInt);
 
-                db.updateRezept(id, nameRezept, currentPhotoPath, schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainSpinner.getSelectedItem().toString(), subSpinner.getSelectedItem().toString(), 0);
+                db.updateRezept(id, nameRezept, currentPhotoPath, bewertungWert, schwierigkeitsgradWert, vorgehensweise ,zeit,mainSpinner.getSelectedItem().toString(), subSpinner.getSelectedItem().toString(), 0);
 
                 //TO-DO: hier Toast, dass es tatsächlich gespeichert wurdes
                 Toast saveToast = Toast.makeText(this, "Dein Rezept wurde gespeichert.", Toast.LENGTH_SHORT);
@@ -367,7 +399,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             inhalt[0] = unterkategorie[0];
             inhalt[1] = unterkategorie[1];
             setSpinner(subSpinner, inhalt);
-            Log.d("SL", "Pos 0");
 
             //Ausgewählte Unterkategorie setzen
             if (unter.equals("vegan")){
@@ -384,16 +415,16 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             setSpinner(subSpinner, inhalt);
 
             //Ausgewählte Unterkategorie setzen
-            if (unter.equals("vegan2")){
+            if (unter.equals("vegan")){
                 subSpinner.setSelection(0);
             }
-            else if (unter.equals("nicht vegan2")){
+            else if (unter.equals("nicht vegan")){
                 subSpinner.setSelection(2);
             }
             else if (unter.equals("vegetarisch")){
                 subSpinner.setSelection(1);
             }
-            Log.d("SL", "Pos 1");
+
         }
 
     }
