@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RezeptEdit"
+        android:background="@android:color/white">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/FOTO_EDIT"
+                android:src="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"/>
+            <Button
+                android:id="@+id/B_FOTO_EDIT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mach ein Foto!"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:stateListAnimator="@null"
+                />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:stretchColumns="*">
+                <TableRow android:layout_width="0dp">
+                    <Spinner
+                        android:id="@+id/MAIN_SPINNER2_EDIT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        />
+                    <Spinner
+                        android:id="@+id/SUB_SPINNER2_EDIT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </TableRow>
+            </TableLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name des Rezepts"
+                    android:textSize="19sp"/>
+                <EditText
+                    android:id="@+id/NAME_EDITTEXT_EDIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textSize="17sp"
+                    android:hint="Gib einen geeigneten Namen ein."/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Zubereitungszeit"
+                    android:textSize="19sp"/>
+                <EditText
+                    android:id="@+id/ZEIT_EDITTEXT_EDIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:maxLength="4"
+                    android:textSize="17sp"
+                    android:hint="Wie viel Zeit benötigt das Rezept?"/>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="*">
+
+                    <TableRow
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Füge eine Zutat hinzu:"
+                            android:textSize="19sp" />
+                        <ImageButton
+                            android:id="@+id/B_ZUTAT_EDIT"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:background="@drawable/circle"
+                            android:src="@drawable/add"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            />
+                    </TableRow>
+                </TableLayout>
+                <ListView
+                    android:id="@+id/ZUTATEN_LISTE_EDIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="16dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Schwierigkeitsgrad:"
+                    android:textSize="19sp" />
+                <SeekBar
+                    android:id="@+id/SCHWIERIGKEITSGRAD_EDIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="5"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/GRAD_TEXT_EDIT"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bewertung:"
+                    android:textSize="19sp" />
+                <RatingBar
+                    android:id="@+id/BEWERRTUNG_EDIT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1.0" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Zubereitung:"
+                    android:textSize="19sp"/>
+                <EditText
+                    android:id="@+id/VORGEHENSWEISE_EDITTEXT_EDIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:hint="Wie wird das Rezept zubereitet?"/>
+            </LinearLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:stretchColumns="*">
+                <TableRow android:layout_width="0dp">
+                    <Button
+                        android:id="@+id/CANCEL_EDIT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Abbrechen"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:stateListAnimator="@null"/>
+                    <Button
+                        android:id="@+id/OK_EDIT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ok"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:stateListAnimator="@null"/>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>

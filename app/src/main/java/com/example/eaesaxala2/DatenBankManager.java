@@ -148,6 +148,26 @@ public class DatenBankManager extends SQLiteOpenHelper {
         String where = SPALTE_REZEPT_ID + "=?";
         String[] whereArg = new String [] {rezeptnr};
         db.update(TABELLE_REZEPT, values, where, whereArg);
+
+    }
+
+    //Xaver
+    public void updateRezept (String rezeptnr, String name, String bild, int bewertung, int schwierigkeitsgrad, String vorgehensweise, double zeit, String hauptkategorie, String unterkategorie, int liked) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SPALTE_REZEPT_NAME, name);
+        values.put(SPALTE_REZEPT_BILD, bild);
+        values.put(SPALTE_REZEPT_BEWERTUNG, bewertung);
+        values.put(SPALTE_REZEPT_SCHWIERIGKEITSGRAD, schwierigkeitsgrad);
+        values.put(SPALTE_REZEPT_ZEIT, zeit);
+        values.put(SPALTE_REZEPT_HAUPTKATEGORIE, hauptkategorie);
+        values.put(SPALTE_REZEPT_UNTERKATEGORIE, unterkategorie);
+        values.put(SPALTE_REZEPT_LIKED, 0);
+        values.put(SPALTE_REZEPT_VORGEHENSWEISE, vorgehensweise);
+        String where = SPALTE_REZEPT_ID + "=?";
+        String[] whereArg = new String [] {rezeptnr};
+        db.update(TABELLE_REZEPT, values, where, whereArg);
+        Log.d("XL","Tabelle updated" + rezeptnr);
     }
 
 
