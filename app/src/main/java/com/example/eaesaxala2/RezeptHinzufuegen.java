@@ -276,7 +276,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                 int bewertungWert = (int) bewertung.getRating();
 
 
-                long id = db.insertRezept(nameRezept, currentPhotoPath, schwierigkeitsgradWert, bewertungWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
+                long id = db.insertRezept(nameRezept, currentPhotoPath, bewertungWert, schwierigkeitsgradWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
                 String newId = Long.toString(id);
 
                 //Alle Zutaten hinzufügen

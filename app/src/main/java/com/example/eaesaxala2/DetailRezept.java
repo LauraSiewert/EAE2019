@@ -55,9 +55,6 @@ public class DetailRezept extends AppCompatActivity {
 
         registerForContextMenu(name);
 
-        //Navigationbar ändern
-        setTitle("Rezept Details");
-
         Intent i = getIntent();
         String id =  i.getStringExtra("id");
         Log.d("SL", "das ist die ID:"+id);
@@ -66,6 +63,9 @@ public class DetailRezept extends AppCompatActivity {
 
             Rezept rezept =  db.selectRezept(id);
             name.setText(rezept.getName());
+
+            //Navigationbar ändern
+            setTitle(rezept.getName() + " Rezept");
 
             Bitmap bitmap = BitmapFactory.decodeFile(rezept.foto);
             foto.setImageBitmap(bitmap);
@@ -133,9 +133,10 @@ public class DetailRezept extends AppCompatActivity {
                 return true;
             case R.id.ITEM_DELETE2:
                 if (id != null) {
+                    Toast.makeText(this,db.getRezeptName(id_zahl) + " gelöscht", Toast.LENGTH_SHORT).show();
+                    db.deleteRezept(id_zahl);
                     Intent mainActivity = new Intent(this, MainActivity.class);
                     startActivity(mainActivity);
-                    Toast.makeText(this,"gelöscht", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 Toast.makeText(this,"UPS", Toast.LENGTH_SHORT).show();
