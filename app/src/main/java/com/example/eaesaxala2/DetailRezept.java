@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Rating;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,8 @@ public class DetailRezept extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_rezept);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = new DatenBankManager(this);
 
@@ -111,6 +114,7 @@ public class DetailRezept extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -135,6 +139,10 @@ public class DetailRezept extends AppCompatActivity {
                     return true;
                 }
                 Toast.makeText(this,"UPS", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             default:

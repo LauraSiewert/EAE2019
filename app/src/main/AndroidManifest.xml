@@ -28,7 +28,11 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".DetailRezept" />
+        <activity android:name=".DetailRezept" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.eaesaxala2.MainActivity" />
+        </activity>
         <activity android:name=".BackenGewaehlt" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -40,6 +44,7 @@
         <activity android:name=".KochenGewaehlt" />
         <activity android:name=".RezeptHinzufuegen" />
         <activity android:name=".BackenOderKochen"></activity>
+        <activity android:name=".RezeptEdit"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
