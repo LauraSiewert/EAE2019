@@ -32,6 +32,7 @@ public class SearchableActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
+        setTheme(R.style.AppTheme);
 
         setTitle("Rezept suche");
 

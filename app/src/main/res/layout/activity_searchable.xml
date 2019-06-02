@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchableActivity">
+    tools:context=".SearchableActivity"
+    android:background="@android:color/white">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         tools:context="com.inducesmile.androidsearchdialog.SearchableActivity"
         android:orientation="vertical"
@@ -23,7 +24,7 @@
             />
     <ListView
         android:id="@+id/SEARCHLIST"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"></ListView>
     </LinearLayout>

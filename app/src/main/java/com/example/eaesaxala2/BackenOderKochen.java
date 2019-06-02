@@ -18,13 +18,15 @@ public class BackenOderKochen extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backen_oder_kochen);
+        setTheme(R.style.AppTheme);
 
-        //Button registrieren
+        //UI
         kochen = findViewById(R.id.KOCHEN_B);
         backen = findViewById(R.id.BACKEN_B);
         kochen.setOnClickListener(this);
         backen.setOnClickListener(this);
 
+        //Titel
         setTitle("Rezept hinzufügen");
 
     }

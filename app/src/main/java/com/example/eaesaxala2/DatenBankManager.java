@@ -141,17 +141,6 @@ public class DatenBankManager extends SQLiteOpenHelper {
 
     }
 
-    public void updateLike (String rezeptnr, int like){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(SPALTE_REZEPT_LIKED, like);
-        String where = SPALTE_REZEPT_ID + "=?";
-        String[] whereArg = new String [] {rezeptnr};
-        db.update(TABELLE_REZEPT, values, where, whereArg);
-
-    }
-
-    //Xaver
     public void updateRezept (String rezeptnr, String name, String bild, int bewertung, int schwierigkeitsgrad, String vorgehensweise, double zeit, String hauptkategorie, String unterkategorie, int liked) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -211,6 +200,7 @@ public class DatenBankManager extends SQLiteOpenHelper {
 
 
     //Methoden für Zutaten
+
     public long insertZutaten (String name, Double menge, String einheit, String rezeptnr){
         ContentValues neueZeile = new ContentValues();
         neueZeile.put(SPALTE_ZUTATEN_NAME, name);
@@ -219,7 +209,6 @@ public class DatenBankManager extends SQLiteOpenHelper {
         neueZeile.put(SPALTE_MENGE, menge);
         SQLiteDatabase db = this.getWritableDatabase();
 
-        //db.insert(TABELLE_ZUTATEN, null, neueZeile);
         Log.d("SL", "Die Zutaten wurden hinzugefügt "+ neueZeile);
 
         long newRowId = db.insertOrThrow(DatenBankManager.TABELLE_ZUTATEN, null, neueZeile);

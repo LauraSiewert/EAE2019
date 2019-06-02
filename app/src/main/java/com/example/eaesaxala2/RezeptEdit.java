@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RezeptEdit extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class RezeptEdit extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
     DatenBankManager db;
     Context ctx = this;
@@ -74,6 +75,10 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rezept_edit);
+        setTheme(R.style.AppTheme);
+
+        //Tastatur nicht direkt anzeigen
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         db = new DatenBankManager(this);
 
@@ -94,7 +99,7 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
         cancel = findViewById(R.id.CANCEL_EDIT);
         ok = findViewById(R.id.OK_EDIT);
 
-        //Navigationbar ändern
+        //Titel
         setTitle("Rezept bearbeiten");
 
         Intent i = getIntent();
@@ -127,7 +132,9 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             ratingbar.setRating(rezept.getBewertung());
 
             schwierigkeit.setProgress(rezept.getSchwierigkeitsgrad());
-
+            Log.e("SL", "das ist mein progress: "+ rezept.getSchwierigkeitsgrad());
+            Log.e("SL", "das ist mein progress2: "+ schwierigkeit.getProgress());
+            schwierigkeit.setOnSeekBarChangeListener(this);
             vorgehen.setText(rezept.vorgehensweise);
 
             zutaten = rezept.getZutaten();
@@ -179,9 +186,30 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
 
     //Kamera
     private void setPic() {
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+
+        // Get the dimensions of the View
+        int targetW = foto.getWidth();
+        int targetH = foto.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         foto.setImageBitmap(bitmap);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -243,14 +271,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
 
     //Höhe für die ListView berechnen, da sich diese in einer Scrollview befindet
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -391,9 +411,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int itemRes = android.R.layout.simple_spinner_dropdown_item;
         //Möglichkeiten für Hauptkategoriespinner im Dialog
-        Toast.makeText(parent.getContext(),
-                "OnItemSelectedListener : " + parent.getItemAtPosition(position).toString(),
-                Toast.LENGTH_SHORT).show();
         if (position==0) {
             String[] inhalt = new String[2];
             inhalt[0] = unterkategorie[0];
@@ -426,6 +443,33 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             }
 
         }
+
+    }
+
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        TextView gradText = findViewById(R.id.GRAD_TEXT_EDIT);
+        if(progress==0){
+            gradText.setText("leicht");
+        }
+        else if(progress==1){
+            gradText.setText("mittel");
+        }
+        else if(progress==2){
+            gradText.setText("schwer");
+        }
+        else{
+            gradText.setText("k.A.");
+        }
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 

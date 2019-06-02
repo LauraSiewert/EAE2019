@@ -18,15 +18,15 @@ public class BackenGewaehlt extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backen_gewaehlt);
+        setTheme(R.style.AppTheme);
 
-        setTitle("Backen oder Kochen?");
-
-
+        //UI
         vegan = findViewById(R.id.VEGAN_B2);
         notVegan = findViewById(R.id.VEGGI_B2);
         vegan.setOnClickListener(this);
         notVegan.setOnClickListener(this);
 
+        //Titel
         setTitle("Rezept hinzufügen");
 
     }

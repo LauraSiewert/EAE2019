@@ -4,39 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BackenGewaehlt">
+    tools:context=".BackenGewaehlt"
+    android:background="@android:color/white">
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:layout_gravity="center_vertical">
+        android:padding="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bakeChoosed"
+            android:textAlignment="center"
+            android:textSize="22sp" />
         <ImageButton
             android:id="@+id/VEGGI_B2"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/circle"
-            android:src="@drawable/broccoli"
-            android:paddingTop="20dp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:padding="40dp"
-            android:layout_margin="20dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_margin="10dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"/>
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:padding="35dp"
+            android:paddingTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/broccoli"
+            android:textColor="#fff" />
+
         <ImageButton
             android:id="@+id/VEGAN_B2"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/circle"
-            android:src="@drawable/leaves"
-            android:paddingTop="20dp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:padding="40dp"
-            android:layout_margin="20dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_margin="10dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"/>
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:padding="35dp"
+            android:paddingTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/leaves"
+            android:textColor="#fff" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

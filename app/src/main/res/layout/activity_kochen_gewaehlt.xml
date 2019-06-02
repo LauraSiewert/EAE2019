@@ -4,50 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".KochenGewaehlt">
+    tools:context=".KochenGewaehlt"
+    android:background="@android:color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
+        android:padding="5dp"
         android:layout_gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cokeChoosed"
+            android:padding="5dp"
+            android:textSize="22sp"
+            android:textAlignment="center"
+            />
         <ImageButton
             android:id="@+id/MEAT_B"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:background="@drawable/circle"
             android:src="@drawable/meat"
             android:textColor="#fff"
             android:gravity="center"
-            android:padding="40dp"
-            android:layout_margin="20dp"
+            android:padding="30dp"
+            android:layout_margin="5dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             />
         <ImageButton
             android:id="@+id/VEGGI_B"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:background="@drawable/circle"
             android:src="@drawable/broccoli"
             android:paddingTop="20dp"
             android:textColor="#fff"
             android:gravity="center"
-            android:padding="40dp"
-            android:layout_margin="20dp"
+            android:padding="30dp"
+            android:layout_margin="5dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"/>
         <ImageButton
             android:id="@+id/VEGAN_B"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:background="@drawable/circle"
             android:src="@drawable/leaves"
             android:paddingTop="20dp"
             android:textColor="#fff"
             android:gravity="center"
-            android:padding="40dp"
-            android:layout_margin="20dp"
+            android:padding="30dp"
+            android:layout_margin="5dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"/>
     </LinearLayout>

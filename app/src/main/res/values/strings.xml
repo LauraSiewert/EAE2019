@@ -1,7 +1,29 @@
 <resources>
-    <string name="app_name">EAESaXaLa2</string>
+    <string name="app_name">HappyMeal</string>
     <string name="search_hint">Suche Rezept..</string>
     <string name="app_label">EAESaXaLa2</string>
     <string name="search_view">Was suchst du?</string>
     <string name="main_noEntries_label">Du hast noch kein Rezept hinzugefügt.</string>
+    <string name="bakeChoosed">Ist das Rezept  \n vegetarisch oder vegan?</string>
+    <string name="bakeOrCook">Willst du ein Rezept zum Backen oder Kochen hinzufügen?</string>
+    <string name="cokeChoosed">Ist das Rezept nicht vegan, vegetarisch oder vegan?</string>
+    <string name="NameR">Name des Rezepts</string>
+    <string name="ZeitR">Zubereitungszeit</string>
+    <string name="KategorieR">Kategorien</string>
+    <string name="VorgehenR">Zubereitung</string>
+    <string name="ZutatenR">Zutaten</string>
+    <string name="SchwierigkeitR">Schwierigkeitsgrad</string>
+    <string name="BewertungR">Bewertung</string>
+    <string name="FotoB">Mach ein Foto!</string>
+    <string name="NameRHint">Gib einen geeigneten Namen ein.</string>
+    <string name="ZeitRHint">Wie viel Zeit benötigt das Rezept?</string>
+    <string name="addZutat">Füge eine Zutat hinzu</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="ok">Ok</string>
+    <string name="add">Hinzufügen</string>
+    <string name="NameZ">Name der Zutat</string>
+    <string name="EinehitZ">Einheit</string>
+    <string name="Menge">Menge</string>
+    <string name="VorgehenRHint">Wie wird das Gericht zubereitet?</string>
+    <string name="ZeitEinheit">min</string>
 </resources>

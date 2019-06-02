@@ -7,8 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
         <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
             <item name="android:textSize">19sp</item>
         </style>
+    <style name="AppTheme.Launcher">
+    <item name="android:windowBackground">@drawable/launchscreen</item>
+    </style>
 </resources>

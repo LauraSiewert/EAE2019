@@ -9,9 +9,10 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/FOTO_EDIT"
+                android:contentDescription="@string/FotoB"
                 android:src="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -20,7 +21,7 @@
                 android:id="@+id/B_FOTO_EDIT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mach ein Foto!"
+                android:text="@string/FotoB"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:textColor="@android:color/white"
@@ -56,7 +57,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Name des Rezepts"
+                    android:text="@string/NameR"
                     android:textSize="19sp"/>
                 <EditText
                     android:id="@+id/NAME_EDITTEXT_EDIT"
@@ -64,20 +65,33 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:textSize="17sp"
-                    android:hint="Gib einen geeigneten Namen ein."/>
+                    android:hint="@string/NameRHint"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Zubereitungszeit"
+                    android:text="@string/ZeitR"
                     android:textSize="19sp"/>
-                <EditText
-                    android:id="@+id/ZEIT_EDITTEXT_EDIT"
+
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="time"
-                    android:maxLength="4"
-                    android:textSize="17sp"
-                    android:hint="Wie viel Zeit benötigt das Rezept?"/>
+                    android:layout_height="match_parent">
+                    <TableRow>
+                        <EditText
+                            android:id="@+id/ZEIT_EDITTEXT_EDIT"
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:textSize="17sp"
+                            android:hint="@string/ZeitRHint"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ZeitEinheit"
+                            android:paddingLeft="15dp"
+                            android:textSize="19sp"/>
+                    </TableRow>
+                </TableLayout>
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -91,15 +105,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Füge eine Zutat hinzu:"
+                            android:text="@string/addZutat"
                             android:textSize="19sp" />
                         <ImageButton
                             android:id="@+id/B_ZUTAT_EDIT"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:gravity="center"
-                            android:background="@drawable/circle"
-                            android:src="@drawable/add"
+                            android:background="@null"
+                            android:src="@drawable/plusround"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
                             />
@@ -114,22 +128,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Schwierigkeitsgrad:"
+                    android:text="@string/SchwierigkeitR"
                     android:textSize="19sp" />
-                <SeekBar
-                    android:id="@+id/SCHWIERIGKEITSGRAD_EDIT"
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="5"
-                    />
+                    android:layout_height="match_parent">
+                    <TableRow>
+                        <SeekBar
+                            android:id="@+id/SCHWIERIGKEITSGRAD_EDIT"
+                            android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:max="2"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/GRAD_TEXT_EDIT"/>
+                    </TableRow>
+                </TableLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/GRAD_TEXT_EDIT"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bewertung:"
+                    android:text="@string/BewertungR"
                     android:textSize="19sp" />
                 <RatingBar
                     android:id="@+id/BEWERRTUNG_EDIT"
@@ -141,7 +161,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Zubereitung:"
+                    android:text="@string/VorgehenR"
                     android:textSize="19sp"/>
                 <EditText
                     android:id="@+id/VORGEHENSWEISE_EDITTEXT_EDIT"
@@ -163,7 +183,7 @@
                         android:id="@+id/CANCEL_EDIT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Abbrechen"
+                        android:text="@string/abbrechen"
                         android:textColor="@android:color/white"
                         android:backgroundTint="@color/colorPrimary"
                         android:stateListAnimator="@null"/>
@@ -171,7 +191,7 @@
                         android:id="@+id/OK_EDIT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ok"
+                        android:text="@string/ok"
                         android:textColor="@android:color/white"
                         android:backgroundTint="@color/colorPrimary"
                         android:stateListAnimator="@null"/>

@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTheme(R.style.AppTheme);
 
+        //Titel
         setTitle("Meine Rezepte");
 
         db = new DatenBankManager(this);
@@ -88,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d("SL", DatabaseUtils.dumpCursorToString(test2));
         Cursor test3 = db.selectAllZutaten();
         Log.d("SL", DatabaseUtils.dumpCursorToString(test3));
-
-        //TO-DO:
-        //Update richtig Programmieren, so dass nachdem löschen die richtigen Rezepte angezeigt werden, unter den richtigen Filtern
     }
 
 
@@ -220,13 +219,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 inhalt[1] = unterkategorie[2];
                 inhalt[2] = unterkategorie[1];
                 setSpinner(subspinner, inhalt);
-                /*rezeptListe = (ListView) findViewById(R.id.REZEPT_LISTE);
-                int itemLayout = R.layout.main_list_item;
-                Cursor cursor = db.selectRezeptByHauptKategorie("Kochen");
-                String [] from = new String[]{db.SPALTE_REZEPT_BILD, db.SPALTE_REZEPT_NAME, db.SPALTE_REZEPT_ID, db.SPALTE_REZEPT_BEWERTUNG};
-                int [] to = new int[]{R.id.REZEPT_BILD,R.id.REZEPT_NAME, R.id.REZEPT_ID_LIST, R.id.REZEPT_BEWERTUNG};
-                MainListAdapter mainListAdapter = new MainListAdapter(ctx, itemLayout, cursor, from, to, 0);
-                rezeptListe.setAdapter(mainListAdapter);*/
             }
         }
         //Liste erstellen, um die Rezepte auszugeben

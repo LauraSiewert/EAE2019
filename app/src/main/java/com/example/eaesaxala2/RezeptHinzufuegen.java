@@ -27,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -47,12 +48,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-//TO-DO:
-//Aussehen anpassen
-//Warum ist vorgehensweise immer null?
-//Prüfung, wenn etwas nicht eingegeben wird, dass die App nicht abstürzt
 
 
 public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
@@ -85,6 +80,12 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rezept_hinzufuegen);
+        setTheme(R.style.AppTheme);
+
+
+        //Tastatur ausbleden
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         db = new DatenBankManager(this);
 
         setTitle("Rezept hinzufügen");
@@ -112,6 +113,7 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         foto = findViewById(R.id.FOTO);
         fotob = findViewById(R.id.B_FOTO);
         fotob.setOnClickListener(this);
+        foto.setImageResource(R.drawable.defaultpic);
 
         //Schwierigkeitsgrad
         schwierirgkeitsgrad = findViewById(R.id.SCHWIERIGKEITSGRAD);
@@ -166,8 +168,33 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     }
 
     //Kamera
-    private void setPic() {
+    /*private void setPic() {
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+        foto.setImageBitmap(bitmap);
+    }*/
+
+    private void setPic() {
+
+        // Get the dimensions of the View
+        int targetW = foto.getWidth();
+        int targetH = foto.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         foto.setImageBitmap(bitmap);
     }
 
@@ -231,14 +258,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         }
     }
 
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
 
 
     //Methode um den Default-Wert des Spinners zu setzen
@@ -347,9 +366,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int itemRes = android.R.layout.simple_spinner_dropdown_item;
         //Möglichkeiten für Hauptkategoriespinner im Dialog
-        Toast.makeText(parent.getContext(),
-                "OnItemSelectedListener : " + parent.getItemAtPosition(position).toString(),
-                Toast.LENGTH_SHORT).show();
             if (position==0) {
                 String[] inhalt = new String[2];
                 inhalt[0] = unterkategorie[0];
@@ -400,7 +416,19 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        gradText.setText("Wert: "+progress);
+        if(progress==0){
+            gradText.setText("leicht");
+        }
+        else if(progress==1){
+            gradText.setText("mittel");
+        }
+        else if(progress==2){
+            gradText.setText("schwer");
+        }
+        else{
+            gradText.setText("k.A.");
+        }
+
     }
 
     @Override

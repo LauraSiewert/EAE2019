@@ -16,7 +16,9 @@ public class KochenGewaehlt extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kochen_gewaehlt);
+        setTheme(R.style.AppTheme);
 
+        //UI
         vegan = findViewById(R.id.VEGAN_B);
         veggie = findViewById(R.id.VEGGI_B);
         meat = findViewById(R.id.MEAT_B);
@@ -24,6 +26,7 @@ public class KochenGewaehlt extends AppCompatActivity implements View.OnClickLis
         veggie.setOnClickListener(this);
         meat.setOnClickListener(this);
 
+        //Titel
         setTitle("Rezept hinzufügen");
 
     }
