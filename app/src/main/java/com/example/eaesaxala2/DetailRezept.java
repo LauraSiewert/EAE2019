@@ -101,12 +101,16 @@ public class DetailRezept extends AppCompatActivity implements SeekBar.OnSeekBar
                 hauptkategorie.setImageResource(R.drawable.cooking);
             }
 
-            if ((rezept.unterkategorie).equals("vegan")){
+            if ((rezept.unterkategorie).equals("vegan")){ //Backen vegan
                 unterkategorie.setImageResource(R.drawable.leaves);
-            } else if ((rezept.unterkategorie).equals("vegetarisch")){
+            } else if ((rezept.unterkategorie).equals("vegetarisch")){ //Kochen vegetarisch
                 unterkategorie.setImageResource(R.drawable.broccoli);
-            } else {
+            } else if ((rezept.unterkategorie).equals("nicht vegan2")) { //Kochen nicht vegan
                 unterkategorie.setImageResource(R.drawable.meat);
+            } else if ((rezept.unterkategorie).equals("vegan2")) { //Kochen vegan
+                unterkategorie.setImageResource(R.drawable.leaves);
+            } else if ((rezept.unterkategorie).equals("nicht vegan")) { //Backen nicht vegan 
+                unterkategorie.setImageResource(R.drawable.broccoli);
             }
 
             vorgehensweise.setText(rezept.vorgehensweise);
