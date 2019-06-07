@@ -16,6 +16,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -68,6 +70,10 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
     String id;
     String haupt;
     String unter;
+    int nameLänge = 0;
+    int mengeLänge = 0;
+    int einheitLänge = 0;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -104,7 +110,7 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
 
         Intent i = getIntent();
         id = i.getStringExtra("id");
-        Log.d("SL", "das ist die ID:" + id);
+
 
         //Daten in View laden
         if (!(id.equals(null))) {
@@ -117,28 +123,21 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
 
             setDefaultSpinner(haupt);
 
-            Log.d("XL","Kategorien " + haupt + " " + unter);
-
             image2 = rezept.foto;
 
-            Log.d("XL","Foto: " + rezept.foto);
 
             Bitmap bitmap = BitmapFactory.decodeFile(rezept.foto);
             foto.setImageBitmap(bitmap);
 
             zeitText.setText(Integer.toString(rezept.getZeit()));
-            Log.d("XL","Bewertung: " + Integer.toString(rezept.getBewertung()));
 
             ratingbar.setRating(rezept.getBewertung());
 
             schwierigkeit.setProgress(rezept.getSchwierigkeitsgrad());
-            Log.e("SL", "das ist mein progress: "+ rezept.getSchwierigkeitsgrad());
-            Log.e("SL", "das ist mein progress2: "+ schwierigkeit.getProgress());
             schwierigkeit.setOnSeekBarChangeListener(this);
             vorgehen.setText(rezept.vorgehensweise);
 
             zutaten = rezept.getZutaten();
-            Log.d("SL", "das sind die zutaten" + zutaten.toString());
             ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, zutaten);
             zutatenListe.setAdapter(mAdapter);
             setListViewHeightBasedOnChildren(zutatenListe);
@@ -159,7 +158,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
         switch (item.getItemId()) {
             case R.id.ITEM_DELETE:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-                Log.d("XL",""+info.position);
                 Toast.makeText(ctx, zutaten.get(info.position).name + " gelöscht.", Toast.LENGTH_SHORT).show();
                 zutaten.remove(info.position);
                 zutatenListe.invalidateViews();
@@ -177,8 +175,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
         inflater.inflate(R.menu.context_menu, menu);
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Log.d("XL",""+info.position);
-        Log.d("XL", "" + zutaten.get(info.position).name);
 
         MenuItem deleteTexView = menu.findItem(R.id.ITEM_DELETE);
         deleteTexView.setTitle(zutaten.get(info.position).name + " löschen");
@@ -253,7 +249,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Log.d("Sl", "Image file wurde kreiert");
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 Log.d("Sl", "ERROOOOOOR yeaaah");
@@ -325,15 +320,12 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
                 saveToast.show();
             }
         } else if (v == cancel) {
-            Log.d("XL", "cancel pressed");
             Intent detail_viewInt = new Intent(getApplicationContext(), DetailRezept.class);
             detail_viewInt.putExtra("id", id);
             startActivity(detail_viewInt);
         } else if (v == imageButton) {
-            Log.d("XL","imageButton pressed");
             dispatchTakePictureIntent();
         } else if (v == addZutat){
-            Log.d("XL","addZutat gedrückt");
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Neue Zutat hinzufügen");
             dialog.setMessage("Infortmation eintragen:");
@@ -351,7 +343,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
                     Zutaten zutat;
                     zutat = new Zutaten (name, menge, einheit);
                     zutaten.add(zutat);
-                    Log.d("XL","Zutaten: " + zutaten);
 
 
                     //Zutaten hinzufügen
@@ -359,6 +350,10 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
                     ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, zutaten);
                     zutatenListe.setAdapter(mAdapter);
                     setListViewHeightBasedOnChildren(zutatenListe);
+
+                    nameLänge=0;
+                    mengeLänge=0;
+                    einheitLänge=0;
 
                 }
             });
@@ -368,12 +363,89 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
                 }
             });
 
+            AlertDialog alertDialog = dialog.create();
+
             dialog.create();
-            dialog.show();
+            alertDialog.show();
+
+            //Hinzufügen-Button enablen, bis alles ausgefüllt ist
+            final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setEnabled(false);
+            final EditText nameEdit = (EditText) layout.findViewById(R.id.NAME);
+            nameEdit.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    nameLänge = nameEdit.getText().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            final EditText mengeEdit = (EditText) layout.findViewById(R.id.MENGE);
+            mengeEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mengeLänge = mengeEdit.getText().toString().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            final EditText einheitEdit = (EditText) layout.findViewById(R.id.EINHEIT);
+            einheitEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    einheitLänge = einheitEdit.getText().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
 
         }
 
+    }
+
+    //Methode zum prüfen, ob alle Fedler ausgefüllt sind
+
+    public void checkDialog (int nameLänge, int mengeLänge, int einheitLänge, Button okButton){
+        if ((nameLänge==0)&&(mengeLänge==0)&&(einheitLänge==0)) {
+            okButton.setEnabled(false);
+        }
+        else if ((nameLänge!=0)&&(mengeLänge!=0)&&(einheitLänge!=0)){
+            okButton.setEnabled(true);
+
+            //Zurück auf 0 setzen
+            nameLänge=0;
+            mengeLänge=0;
+            einheitLänge=0;
+        }
     }
 
     public boolean checkInformation(String image, EditText titel, EditText zeit, ListView zutaten, EditText zubereitung){
@@ -487,7 +559,6 @@ public class RezeptEdit extends AppCompatActivity implements View.OnClickListene
             mainSpinner.setSelection(1);
 
         } else if (choose.equals("leer")){
-            Log.d("XL", "leer");
         }
     }
 

@@ -58,7 +58,6 @@ public class SearchableActivity extends AppCompatActivity {
         searchText = findViewById(R.id.SEARCHTEXT);
 
         handleIntent(getIntent());
-        Log.d("Sl", "Ich wollte das neu setzen."+ query);
         if(query==null){
             searchText.setText("Du hast noch nichts gesucht.");
         }
@@ -84,7 +83,6 @@ public class SearchableActivity extends AppCompatActivity {
         List<ItemObject> dictionaryObject = db.searchDictionaryWords(query);
         SearchAdapter mSearchAdapter = new SearchAdapter(SearchableActivity.this, dictionaryObject);
         searchList.setAdapter(mSearchAdapter);
-        Log.d("SL", "mein query ist: " + query);
         searchText.setText("Du hast nach "+ query +" gesucht.");
     }
 

@@ -20,6 +20,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -73,7 +75,12 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
     EditText nameRezeptEditText;
     EditText zeitEditText;
     EditText vorgehenEditText;
-    //Test
+    int nameLänge = 0;
+    int mengeLänge = 0;
+    int einheitLänge = 0;
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -93,7 +100,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         //Intents
         Intent i = getIntent();
         choosed = i.getStringExtra("CHOOSE");
-        Log.d("SL", "Das ist "+ choosed);
 
         //Spinner setzen
         mainspinner2 = findViewById(R.id.MAIN_SPINNER2);
@@ -294,7 +300,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                 int schwierigkeitsgradWert = schwierirgkeitsgrad.getProgress();
                 int bewertungWert = (int) bewertung.getRating();
 
-
                 long id = db.insertRezept(nameRezept, currentPhotoPath, bewertungWert, schwierigkeitsgradWert, vorgehensweise ,zeit,mainspinner2.getSelectedItem().toString(), subspinner2.getSelectedItem().toString(), 0);
                 String newId = Long.toString(id);
 
@@ -320,15 +325,16 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
         }
         else if(v==fotob){
             dispatchTakePictureIntent();
-            //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            //startActivityForResult(intent,CAM_REQUEST);
         }
         else if (v==zutatenb){
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Neue Zutat hinzufügen");
             dialog.setMessage("Infortmation eintragen:");
             final View layout = this.getLayoutInflater().inflate(R.layout.dialog_add_rezept, null);
             dialog.setView(layout);
+
+
             dialog.setPositiveButton("Hinzufügen", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -338,8 +344,9 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                     String name = nameEdit.getText().toString();
                     double menge = Double.parseDouble(mengeEdit.getText().toString());
                     String einheit = einheitEdit.getText().toString();
-                    Zutaten zutat;
-                    zutat = new Zutaten (name, menge, einheit);
+
+                    Zutaten zutat = new Zutaten (name, menge, einheit);
+
                     neueZutaten.add(zutat);
 
 
@@ -349,6 +356,11 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                     zutatenListe.setAdapter(mAdapter);
                     setListViewHeightBasedOnChildren(zutatenListe);
 
+                    //Längen zurück setzen, damit die Prüfung erneut beginnen kann
+                    nameLänge=0;
+                    mengeLänge=0;
+                    einheitLänge=0;
+
                 }
             });
             dialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -357,11 +369,91 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                 }
             });
 
+            AlertDialog alertDialog = dialog.create();
+
             dialog.create();
-            dialog.show();
+            alertDialog.show();
+
+
+            //Hinzufügen-Button enablen, bis alles ausgefüllt ist
+            final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setEnabled(false);
+            final EditText nameEdit = (EditText) layout.findViewById(R.id.NAME);
+            nameEdit.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    nameLänge = nameEdit.getText().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            final EditText mengeEdit = (EditText) layout.findViewById(R.id.MENGE);
+            mengeEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mengeLänge = mengeEdit.getText().toString().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            final EditText einheitEdit = (EditText) layout.findViewById(R.id.EINHEIT);
+            einheitEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    einheitLänge = einheitEdit.getText().length();
+                    checkDialog(nameLänge, mengeLänge, einheitLänge, okButton);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
 
         }
     }
+
+    //Methode zum prüfen, ob alle Fedler ausgefüllt sind
+
+    public void checkDialog (int nameLänge, int mengeLänge, int einheitLänge, Button okButton){
+        if ((nameLänge==0)&&(mengeLänge==0)&&(einheitLänge==0)) {
+            okButton.setEnabled(false);
+        }
+        else if ((nameLänge!=0)&&(mengeLänge!=0)&&(einheitLänge!=0)){
+            okButton.setEnabled(true);
+
+            //Zurück auf 0 setzen
+            nameLänge=0;
+            mengeLänge=0;
+            einheitLänge=0;
+        }
+    }
+
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int itemRes = android.R.layout.simple_spinner_dropdown_item;
@@ -397,7 +489,6 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
                 else if (choosed.equals("vegetarisch")){
                     subspinner2.setSelection(1);
                 }
-                Log.d("SL", "Pos 1");
             }
     }
 

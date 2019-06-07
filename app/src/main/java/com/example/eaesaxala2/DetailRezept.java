@@ -69,7 +69,6 @@ public class DetailRezept extends AppCompatActivity implements SeekBar.OnSeekBar
         //Intents
         Intent i = getIntent();
         String id =  i.getStringExtra("id");
-        Log.d("SL", "das ist die ID:"+id);
 
         if (!(id.equals(null))){
 
@@ -83,29 +82,25 @@ public class DetailRezept extends AppCompatActivity implements SeekBar.OnSeekBar
             foto.setImageBitmap(bitmap);
 
             zeit.setText(Integer.toString(rezept.getZeit()));
-            Log.d("XL","Bewertung: " + Integer.toString(rezept.getBewertung()));
             rating.setRating(rezept.getBewertung());
 
-            Log.d("XL", "Schwierigkeit: " + Integer.toString(rezept.getSchwierigkeitsgrad()));
             schwierigkeit.setProgress(rezept.getSchwierigkeitsgrad());
             schwierigkeit.setOnSeekBarChangeListener(this);
             setSchwierigkeit_int(schwierigkeit);
-            Log.e("SL", "das ist mein progress: "+ rezept.getSchwierigkeitsgrad());
-            Log.e("SL", "das ist mein progress2: "+ schwierigkeit.getProgress());
-
-            //schwierigkeit_int.setText(Integer.toString(rezept.getSchwierigkeitsgrad()));
 
             if ((rezept.hauptkategorie).equals("Backen")){
                 hauptkategorie.setImageResource(R.drawable.cupcake);
             } else if ((rezept.hauptkategorie).equals("Kochen")){
-                hauptkategorie.setImageResource(R.drawable.cooking);
+                hauptkategorie.setImageResource(R.drawable.pot);
             }
+
+
 
             if ((rezept.unterkategorie).equals("vegan")){ //Backen vegan
                 unterkategorie.setImageResource(R.drawable.leaves);
             } else if ((rezept.unterkategorie).equals("vegetarisch")){ //Kochen vegetarisch
                 unterkategorie.setImageResource(R.drawable.broccoli);
-            } else if ((rezept.unterkategorie).equals("nicht vegan2")) { //Kochen nicht vegan
+            } else if ((rezept.unterkategorie).equals("nicht vegan")&&((rezept.hauptkategorie).equals("Kochen"))) { //Kochen nicht vegan
                 unterkategorie.setImageResource(R.drawable.meat);
             } else if ((rezept.unterkategorie).equals("vegan2")) { //Kochen vegan
                 unterkategorie.setImageResource(R.drawable.leaves);
@@ -116,7 +111,6 @@ public class DetailRezept extends AppCompatActivity implements SeekBar.OnSeekBar
             vorgehensweise.setText(rezept.vorgehensweise);
 
             ArrayList <Zutaten> zutaten = rezept.getZutaten();
-            Log.d("SL", "das sind die zutaten" + zutaten.toString());
             ZutatenAdapter mAdapter = new ZutatenAdapter(ctx, zutaten);
             zutatenListe.setAdapter(mAdapter);
 
@@ -202,19 +196,18 @@ public class DetailRezept extends AppCompatActivity implements SeekBar.OnSeekBar
 
     public void setSchwierigkeit_int (SeekBar bar){
         schwierigkeit_int = findViewById(R.id.SCHWIERIGKEITSDETAIL_INT);
-        Log.e("SL", "progress ist: "+bar.getProgress());
-        Log.e("SL", "progress ist auch: " + bar.getProgress());
+
         if(bar.getProgress()==0){
             schwierigkeit_int.setText("leicht");
-            Log.e("SL", "grad ist 0");
+
         }
         else if(bar.getProgress()==1){
             schwierigkeit_int.setText("mittel");
-            Log.e("SL", "grad ist 1");
+
         }
         else if(bar.getProgress()==2){
             schwierigkeit_int.setText("schwer");
-            Log.e("SL", "grad ist 2");
+
         }
         else{
             schwierigkeit_int.setText("k.A.");

@@ -26,6 +26,7 @@ import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -87,9 +88,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         Cursor test2 = db.selectRezeptByUnterkategorie("vegetarisch");
-        Log.d("SL", DatabaseUtils.dumpCursorToString(test2));
         Cursor test3 = db.selectAllZutaten();
-        Log.d("SL", DatabaseUtils.dumpCursorToString(test3));
     }
 
 
@@ -355,13 +354,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ITEM_DELETE:
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-                db.deleteRezept((int) info.id);
-                updateListe();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setTitle("Löschen");
+                dialog.setMessage("Möchtest du das Rezept wirklich löschen?");
+                dialog.setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                        db.deleteRezept((int) info.id);
+                        updateListe();
+
+                    }
+                }).setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.create();
+                dialog.show();
                 return true;
+
             default:
                 return super.onContextItemSelected(item);
         }
