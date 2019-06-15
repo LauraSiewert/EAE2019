@@ -246,14 +246,14 @@ public class RezeptHinzufuegen extends AppCompatActivity implements View.OnClick
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Log.d("Sl", "Image file wurde kreiert");
+                Log.e("Sl", "Image file wurde kreiert");
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 Log.d("Sl", "ERROOOOOOR yeaaah");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Log.d("Sl", "photofile ist nicht null");
+                Log.e("Sl", "photofile ist nicht null");
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);

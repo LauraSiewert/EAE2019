@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class MainListAdapter extends CursorAdapter {
 
     LayoutInflater mainListLayoutInflater;
@@ -51,8 +53,15 @@ public class MainListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         String image = cursor.getString(cursor.getColumnIndex(from[0]));
         ImageView imageView = (ImageView) view.findViewById(to[0]);
+
+
         Bitmap bitmap = BitmapFactory.decodeFile(image);
-        imageView.setImageBitmap(bitmap);
+        //imageView.setImageBitmap(bitmap);
+        //Glide.with(context.load(image)).into.imageView);
+
+        Glide.with(context.getApplicationContext())
+                .load(image)
+                .into(imageView);
 
         String text1 = cursor.getString(cursor.getColumnIndex(from[1]));
         TextView textView = (TextView)view.findViewById(to[1]);
